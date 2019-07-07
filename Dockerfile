@@ -31,8 +31,9 @@ RUN apk add --no-cache \
 RUN adduser --system app --home /app
 USER app
 WORKDIR /app
-RUN git clone https://github.com/jmch1692/application.git timeoff-management && git pull
+RUN git clone https://github.com/jmch1692/application.git timeoff-management
 WORKDIR /app/timeoff-management
+RUN git pull
 
 RUN npm install
 
