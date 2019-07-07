@@ -25,7 +25,7 @@ pipeline{
                     }
                 }
         }
-        stage('Restart site'){
+        stage('Restart web site'){
               steps{
                 azureCLI commands: [[exportVariablesString: '', script: 'az webapp restart --name timeoff --resource-group gorilla-demo']], principalCredentialId: 'jenkins-azure'   
               }
