@@ -13,7 +13,7 @@ pipeline{
         }
         stage('Test'){
             steps{
-                sh "npm test | echo 'Some tests failed!"
+                sh "npm test | echo 'Some tests failed!'"
             }
         }
         
