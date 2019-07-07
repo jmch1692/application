@@ -23,6 +23,7 @@ pipeline{
                     sh "docker build . -t myregistryjmch.azurecr.io/timeoff:${BUILD_NUMBER}"
                     sh "docker push myregistryjmch.azurecr.io/timeoff:${BUILD_NUMBER}"
                 }
+            }
         }
         stage('Restart web site'){
               steps{
