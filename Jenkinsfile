@@ -11,11 +11,12 @@ pipeline{
                 sh "npm install"
             }
         }
-        /*stage('Test'){
+        stage('Test'){
             steps{
                 sh "npm test | echo 'Some tests failed!"
             }
-        }*/
+        }
+        
         stage('Build and Push Docker Image'){
             steps{
                 azureCLI commands: [[exportVariablesString: '', script: 'az acr repository delete -n myregistryjmch --repository timeoff --yes']], principalCredentialId: 'jenkins-azure'
