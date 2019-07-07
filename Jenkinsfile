@@ -1,8 +1,5 @@
 pipeline{
     agent any
-    environment{
-        LAST_BUILD =    
-    }
     stages{
         stage('Checkout'){
             steps{
