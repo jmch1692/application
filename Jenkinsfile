@@ -18,6 +18,7 @@ pipeline{
         }*/
         stage('Build and Push Docker Image'){
             steps{
+                azureCLI commands: [[exportVariablesString: '', script: 'az acr repository delete -n myregistryjmch --image timeoff:latest']], principalCredentialId: 'jenkins-azure'
                 withCredentials([usernamePassword(credentialsId: 'azure-registry', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     sh "docker login myregistryjmch.azurecr.io -u ${user} -p ${pass}"
                     sh "docker build . -t myregistryjmch.azurecr.io/timeoff:${BUILD_NUMBER}"
