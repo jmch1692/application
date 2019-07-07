@@ -18,11 +18,10 @@ pipeline{
         }*/
         stage('Build and Push Docker Image'){
             steps{
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: '')]) {                
-                        sh "docker login https://index.docker.io/v1/ -p ${pass} -u jmch1692"
-                        sh "docker build . -t jmch1692/timeoff:latest"
-                        sh "docker push jmch1692/timeoff:latest"
-                    }
+                withCredentials([usernamePassword(credentialsId: 'azure-registry', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh "docker login myregistryjmch.azurecr.io -u ${user} -p ${pass}"
+                    sh "docker build . -t myregistryjmch.azurecr.io/timeoff:${BUILD_NUMBER}"
+                    sh "docker push myregistryjmch.azurecr.io/timeoff:${BUILD_NUMBER}"
                 }
         }
         stage('Restart web site'){
