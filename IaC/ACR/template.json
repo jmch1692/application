@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "webhooks_webapptimeoff_serviceUri": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "registries_myregistryjmch_name": {
+            "defaultValue": "myregistryjmch",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2017-10-01",
+            "name": "[parameters('registries_myregistryjmch_name')]",
+            "location": "eastus",
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic"
+            },
+            "properties": {
+                "adminUserEnabled": true
+            }
+        },
+        {
+            "type": "Microsoft.ContainerRegistry/registries/webhooks",
+            "apiVersion": "2017-10-01",
+            "name": "[concat(parameters('registries_myregistryjmch_name'), '/webapptimeoff')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registries_myregistryjmch_name'))]"
+            ],
+            "properties": {
+                "status": "enabled",
+                "scope": "timeoff:latest",
+                "actions": [
+                    "push"
+                ],
+                "serviceUri": "[parameters('webhooks_webapptimeoff_serviceUri')]"
+            }
+        }
+    ]
+}
