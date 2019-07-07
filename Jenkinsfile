@@ -23,6 +23,7 @@ pipeline{
                     sh "docker login myregistryjmch.azurecr.io -u ${user} -p ${pass}"
                     sh "docker build . -t myregistryjmch.azurecr.io/timeoff:${BUILD_NUMBER}"
                     sh "docker push myregistryjmch.azurecr.io/timeoff:${BUILD_NUMBER}"
+                    sleep 20
                 }
             }
         }
