@@ -35,7 +35,11 @@ pipeline {
 }
 
 void ciBuild(String target_env) {
-    echo 'building'
+    docker.withRegistry("registry.hub.docker.com/library") {
+            docker.image("node") {
+                sh "npm -v"
+            }
+        }
 }
 
 void mvDeploy(){
