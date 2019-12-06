@@ -35,7 +35,7 @@ pipeline {
 }
 
 void ciBuild(String target_env) {
-    docker.withRegistry("registry.hub.docker.com/library") {
+    docker.withRegistry("https://registry.hub.docker.com/library") {
             docker.image("node").inside() {
                 sh "npm -v"
             }
