@@ -10,7 +10,7 @@ pipeline {
                 changeRequest target: 'develop'
                 beforeAgent true
             }
-            agent 'dev-slave'
+            agent { label 'dev-slave' }
             steps{
                 script{
                     ciBuild('develop')
@@ -23,7 +23,7 @@ pipeline {
                 branch 'develop'
                 beforeAgent true
             }
-            agent 'dev-slave'
+            agent { label 'dev-slave' }
             steps{
                 script{
                     ciBuild('develop')
