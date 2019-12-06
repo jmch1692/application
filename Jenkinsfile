@@ -1,44 +1,43 @@
-pipeline{
-    agent any
-    stages{
-        stage('Checkout'){
-            steps{
-                git 'https://github.com/jmch1692/application.git'
+pipeline {
+    agent none
+    options {
+        timestamps()
+    }
+
+    stages(){
+        stage('CI - Pull request'){
+            when {
+                changeRequest target: 'develop'
+                beforeAgent true
             }
-        }
-        stage('Install dependencies'){
+            agent 'dev-slave'
             steps{
-                sh "node -v && npm -v"
-                sh "npm install"
-            }
-        }
-        stage('Test'){
-            steps{
-                sh "npm test | echo 'Some tests failed!'"
-            }
-        }
-        
-        stage('Build and Push Docker Image'){
-            steps{
-                azureCLI commands: [[exportVariablesString: '', script: 'az acr repository delete -n myregistryjmch --repository timeoff --yes']], principalCredentialId: 'jenkins-azure'
-                withCredentials([usernamePassword(credentialsId: 'azure-registry', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    sh "docker login myregistryjmch.azurecr.io -u ${user} -p ${pass}"
-                    sh "docker build . -t myregistryjmch.azurecr.io/timeoff:latest --no-cache"
-                    sh "docker push myregistryjmch.azurecr.io/timeoff:latest"
-                    sleep 20
+                script{
+                    ciBuild('develop')
                 }
             }
         }
-        stage('Restart web site'){
-              steps{
-                azureCLI commands: [[exportVariablesString: '', script: 'az webapp restart --name timeoff --resource-group gorilla-demo']], principalCredentialId: 'jenkins-azure'   
-              }
+
+        stage('CI/CD develop'){
+            when {
+                branch 'develop'
+                beforeAgent true
+            }
+            agent 'dev-slave'
+            steps{
+                script{
+                    ciBuild('develop')
+                    mvDeploy()
+                }
+            }
         }
     }
-    post{
-        always{
-            cleanWs()
-        }
-    }
-    
+}
+
+void ciBuild(String target_env) {
+    echo 'building'
+}
+
+void mvDeploy(){
+    echo 'deploying...'
 }
